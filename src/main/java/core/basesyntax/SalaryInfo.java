@@ -4,39 +4,40 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class SalaryInfo {
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+
     public String getSalaryInfo(String[] names, String[] data, String dateFrom, String dateTo) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-        LocalDate from = LocalDate.parse(dateFrom, formatter);
-        LocalDate to = LocalDate.parse(dateTo, formatter);
+        LocalDate fromDate = LocalDate.parse(dateFrom, DATE_FORMATTER);
+        LocalDate toDate = LocalDate.parse(dateTo, DATE_FORMATTER);
 
         int[] salary = new int[names.length];
 
         for (String record : data) {
-            String[] parts = record.split(" ");
-            LocalDate workDate = LocalDate.parse(parts[0], formatter);
-            String name = parts[1];
-            int hours = Integer.parseInt(parts[2]);
-            int income = Integer.parseInt(parts[3]);
+            String[] dataParts = record.split(" ");
+            LocalDate workDate = LocalDate.parse(dataParts[0], DATE_FORMATTER);
+            String employeeName = dataParts[1];
+            int workingHours = Integer.parseInt(dataParts[2]);
+            int incomePerHour = Integer.parseInt(dataParts[3]);
 
-            if ((workDate.isAfter(from) || workDate.isEqual(from))
-                    && (workDate.isBefore(to) || workDate.isEqual(to))) {
+            if ((workDate.isAfter(fromDate) || workDate.isEqual(fromDate))
+                    && (workDate.isBefore(toDate) || workDate.isEqual(toDate))) {
                 for (int i = 0; i < names.length; ++i) {
-                    if (names[i].equals(name)) {
-                        salary[i] += income * hours;
+                    if (names[i].equals(employeeName)) {
+                        salary[i] += incomePerHour * workingHours;
                         break;
                     }
                 }
             }
         }
 
-        StringBuilder builder = new StringBuilder("Report for period " + dateFrom
+        StringBuilder reportBuilder = new StringBuilder("Report for period " + dateFrom
                 + " - " + dateTo);
         for (int i = 0; i < names.length; ++i) {
-            builder.append(System.lineSeparator())
+            reportBuilder.append(System.lineSeparator())
                     .append(names[i])
                     .append(" - ")
                     .append(salary[i]);
         }
-        return builder.toString();
+        return reportBuilder.toString();
     }
 }

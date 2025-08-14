@@ -18,8 +18,8 @@ public class SalaryInfo {
             int hours = Integer.parseInt(parts[2]);
             int income = Integer.parseInt(parts[3]);
 
-            if (workDate.isAfter(from) || workDate.isEqual(from)
-                    && workDate.isBefore(to) || workDate.isEqual(to)) {
+            if ((workDate.isAfter(from) || workDate.isEqual(from))
+                    && (workDate.isBefore(to) || workDate.isEqual(to))) {
                 for (int i = 0; i < names.length; ++i) {
                     if (names[i].equals(name)) {
                         salary[i] += income * hours;
